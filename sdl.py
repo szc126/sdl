@@ -2,6 +2,8 @@
 import argparse
 import json
 from lxml import etree
+import os
+import re
 import requests
 import sys
 
@@ -84,11 +86,33 @@ def main():
 	input('... [ungchoy]')
 	print()
 
+	if args.o:
+		print('(making output directory)')
+		if not os.path.exists(args.o):
+			os.makedirs(args.o)
+		input('... [cilantro]')
+		print()
+
+		print('(writing to disk)')
+		for page in pages:
+			filename = re.sub(r'.+/(\d)', r'\1', page['title']) # XXX: localization?
+			path = os.path.join(args.o, filename)
+			print(path)
+			with open(path, mode = 'a', encoding = 'utf-8') as file:
+				file.write(page['text'])
+		input('... [bo choy]')
+		print()
+
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
 	parser.add_argument(
 		'book',
 		metavar='lang:file',
+	)
+	parser.add_argument(
+		'-o',
+		metavar='directory',
+		help='output directory',
 	)
 	args = parser.parse_args()
 
