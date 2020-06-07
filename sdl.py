@@ -14,6 +14,19 @@ URLS = {
 
 API_PAGE_LIMIT = 50
 
+def generate_sessions(title, pagecount):
+	sessions = []
+	range_start = 1
+	range_stop = min(pagecount, API_PAGE_LIMIT) # do not download 50 pages if there are 8 pages
+	while range_start < pagecount:
+		session = []
+		for i in range(range_start, range_stop + 1):
+			session.append(f'Page:{title}/{i}')
+		range_start += API_PAGE_LIMIT
+		range_stop = min(pagecount, range_stop + API_PAGE_LIMIT)
+		sessions.append(session)
+	return sessions
+
 def query_imageinfo(lang, title):
 	url = URLS['imageinfo'].format(lang, title)
 	content = requests.get(url).content
@@ -22,13 +35,10 @@ def query_imageinfo(lang, title):
 	print('response size: ' + str(len(content)))
 	return json.loads(content)
 
-def query_pages(lang, title, range_start, range_stop):
-	titles = []
-	for i in range(range_start, range_stop + 1):
-		titles.append(f'Page:{title}/{i}')
-	url = URLS['titles'].format(lang, '|'.join(titles))
-
+def query_pages(lang, title, session):
+	url = URLS['titles'].format(lang, '|'.join(session))
 	content = requests.get(url).content
+
 	print(url)
 	print('response size: ' + str(len(content)))
 	return json.loads(content)
@@ -50,14 +60,10 @@ def main():
 	print()
 
 	print('(downloading export)')
+	sessions = generate_sessions(title, pagecount)
 	exports = []
-	range_start = 1
-	range_stop = min(pagecount, API_PAGE_LIMIT) # do not download 50 pages if there are 8 pages
-	while range_start < pagecount:
-		exports.append(query_pages(lang, title, range_start, range_stop))
-		range_start += API_PAGE_LIMIT
-		range_stop = min(pagecount, range_stop + API_PAGE_LIMIT)
-		print()
+	for session in sessions:
+		exports.append(query_pages(lang, title, session))
 	input('... [carrot]')
 	print()
 
