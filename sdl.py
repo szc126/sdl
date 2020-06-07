@@ -65,6 +65,8 @@ def main():
 		export = export['query']['export']['*']
 		export = etree.fromstring(export)
 		for child in export.findall('{*}page'): # `{*}`: wildcard (`*`) XML namespace (`{}`)
+			#print(etree.tostring(child))
+			#print()
 			title = child.find('{*}title')
 			text = child.find('{*}revision/{*}text')
 			pages.append({
