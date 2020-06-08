@@ -7,12 +7,20 @@ import re
 import requests
 import sys
 
+SERVERS = {
+	'': '{}.wikisource.org',
+	'mul': 'wikisource.org',
+}
+
 URLS = {
-	'imageinfo': 'https://{}.wikisource.org/w/api.php?format=json&action=query&titles=File:{}&prop=imageinfo&iiprop=size',
-	'titles': 'https://{}.wikisource.org/w/api.php?format=json&action=query&export=true&titles={}'
+	'imageinfo': 'https://{}/w/api.php?format=json&action=query&titles=File:{}&prop=imageinfo&iiprop=size',
+	'titles': 'https://{}/w/api.php?format=json&action=query&export=true&titles={}'
 }
 
 API_PAGE_LIMIT = 50
+
+def server(lang):
+	return lang in SERVERS and SERVERS[lang] or SERVERS[''].format(lang)
 
 def generate_sessions(title, pagecount):
 	sessions = []
@@ -28,7 +36,7 @@ def generate_sessions(title, pagecount):
 	return sessions
 
 def query_imageinfo(lang, title):
-	url = URLS['imageinfo'].format(lang, title)
+	url = URLS['imageinfo'].format(server(lang), title)
 	content = requests.get(url).content
 
 	print(url)
@@ -36,7 +44,7 @@ def query_imageinfo(lang, title):
 	return json.loads(content)
 
 def query_pages(lang, title, session):
-	url = URLS['titles'].format(lang, '|'.join(session))
+	url = URLS['titles'].format(server(lang), '|'.join(session))
 	content = requests.get(url).content
 
 	print(url)
