@@ -101,7 +101,7 @@ def main():
 	print()
 
 	if args.o:
-		print('(making output directory)')
+		print('(making output directory. will overwrite existing files!)')
 		if not os.path.exists(args.o):
 			os.makedirs(args.o)
 		input('... [cilantro]')
@@ -112,7 +112,7 @@ def main():
 			filename = re.sub(r'.+/(\d)', r'\1', page['title']) # XXX: localization?
 			path = os.path.join(args.o, filename)
 			print(path)
-			with open(path, mode = 'a', encoding = 'utf-8') as file:
+			with open(path, mode = 'w', encoding = 'utf-8') as file:
 				file.write(page['text'])
 		input('... [bo choy]')
 		print()
