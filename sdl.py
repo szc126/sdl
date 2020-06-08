@@ -14,7 +14,7 @@ SERVERS = {
 
 URLS = {
 	'imageinfo': 'https://{}/w/api.php?format=json&action=query&titles=File:{}&prop=imageinfo&iiprop=size',
-	'titles': 'https://{}/w/api.php?format=json&action=query&export=true&titles={}'
+	'export_titles': 'https://{}/w/api.php?format=json&action=query&export=true&titles={}'
 }
 
 API_PAGE_LIMIT = 50
@@ -43,8 +43,8 @@ def query_imageinfo(lang, title):
 	print('response size: ' + str(len(content)))
 	return json.loads(content)
 
-def query_pages(lang, session):
-	url = URLS['titles'].format(server(lang), '|'.join(session))
+def query_export_titles(lang, session):
+	url = URLS['export_titles'].format(server(lang), '|'.join(session))
 	content = requests.get(url).content
 
 	print(url)
@@ -71,7 +71,7 @@ def main():
 	sessions = generate_sessions(title, pagecount)
 	exports = []
 	for session in sessions:
-		exports.append(query_pages(lang, session))
+		exports.append(query_export_titles(lang, session))
 	input('... [carrot]')
 	print()
 
