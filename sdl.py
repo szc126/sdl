@@ -43,7 +43,7 @@ def query_imageinfo(lang, title):
 	print('response size: ' + str(len(content)))
 	return json.loads(content)
 
-def query_pages(lang, title, session):
+def query_pages(lang, session):
 	url = URLS['titles'].format(server(lang), '|'.join(session))
 	content = requests.get(url).content
 
@@ -71,7 +71,7 @@ def main():
 	sessions = generate_sessions(title, pagecount)
 	exports = []
 	for session in sessions:
-		exports.append(query_pages(lang, title, session))
+		exports.append(query_pages(lang, session))
 	input('... [carrot]')
 	print()
 
