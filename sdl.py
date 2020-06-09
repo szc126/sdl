@@ -64,7 +64,7 @@ def main(args):
 		print(f'pagecount: {pagecount} pages')
 	except:
 		sys.exit('pagecount: n/a; exiting')
-	input('... [artichoke]')
+	if args.D: input('... [artichoke]')
 	print()
 
 	print('(downloading export)')
@@ -72,7 +72,7 @@ def main(args):
 	exports = []
 	for session in sessions:
 		exports.append(query_export_titles(lang, session))
-	input('... [carrot]')
+	if args.D: input('... [carrot]')
 	print()
 
 	print('(collecting pages)')
@@ -89,22 +89,23 @@ def main(args):
 				'title': title is not None and title.text,
 				'text': text is not None and text.text,
 			})
-	input('... [cabbage]')
+	if args.D: input('... [cabbage]')
 	print()
 
-	print('(printing pages)')
-	for page in pages:
-		print(page['title'])
-		print(page['text'])
+	if args.D:
+		print('(printing pages)')
+		for page in pages:
+			print(page['title'])
+			print(page['text'])
+			print()
+		if args.D: input('... [ungchoy]')
 		print()
-	input('... [ungchoy]')
-	print()
 
 	if args.o:
 		print('(making output directory. will overwrite existing files!)')
 		if not os.path.exists(args.o):
 			os.makedirs(args.o)
-		input('... [cilantro]')
+		if args.D: input('... [cilantro]')
 		print()
 
 		print('(writing to disk)')
@@ -114,19 +115,24 @@ def main(args):
 			print(path)
 			with open(path, mode = 'w', encoding = 'utf-8') as file:
 				file.write(page['text'])
-		input('... [bo choy]')
+		if args.D: input('... [bo choy]')
 		print()
 
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
 	parser.add_argument(
 		'book',
-		metavar='lang:file',
+		metavar = 'lang:file',
 	)
 	parser.add_argument(
 		'-o',
-		metavar='directory',
-		help='output directory',
+		metavar = 'directory',
+		help = 'output directory',
+	)
+	parser.add_argument(
+		'-D',
+		action = 'store_true',
+		help = 'debug',
 	)
 	args = parser.parse_args()
 
