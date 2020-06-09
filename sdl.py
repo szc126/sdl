@@ -101,17 +101,17 @@ def main(args):
 		if args.D: input('... [ungchoy]')
 		print()
 
-	if args.o:
+	if args.out_dir:
 		print('(making output directory. will overwrite existing files!)')
-		if not os.path.exists(args.o):
-			os.makedirs(args.o)
+		if not os.path.exists(args.out_dir):
+			os.makedirs(args.out_dir)
 		if args.D: input('... [cilantro]')
 		print()
 
 		print('(writing to disk)')
 		for page in pages:
 			filename = re.sub(r'.+/(\d)', r'\1', page['title']) # XXX: localization?
-			path = os.path.join(args.o, filename)
+			path = os.path.join(args.out_dir, filename)
 			print(path)
 			with open(path, mode = 'w', encoding = 'utf-8') as file:
 				file.write(page['text'])
@@ -126,6 +126,7 @@ if __name__ == "__main__":
 	)
 	parser.add_argument(
 		'-o',
+		dest = 'out_dir',
 		metavar = 'directory',
 		help = 'output directory',
 	)
