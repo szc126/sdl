@@ -19,6 +19,10 @@ URLS = {
 
 API_PAGE_LIMIT = 50
 
+REQUESTS_HEADERS = {
+	'User-Agent': 'https://github.com/szc126/sdl',
+}
+
 def server(lang):
 	return lang in SERVERS and SERVERS[lang] or SERVERS[''].format(lang)
 
@@ -37,7 +41,7 @@ def generate_sessions(title, pagecount):
 
 def query_imageinfo(lang, title):
 	url = URLS['imageinfo'].format(server(lang), title)
-	content = requests.get(url).content
+	content = requests.get(url, headers = REQUESTS_HEADERS).content
 
 	print(url)
 	print('response size: ' + str(len(content)))
@@ -45,7 +49,7 @@ def query_imageinfo(lang, title):
 
 def query_export_titles(lang, session):
 	url = URLS['export_titles'].format(server(lang), '|'.join(session))
-	content = requests.get(url).content
+	content = requests.get(url, headers = REQUESTS_HEADERS).content
 
 	print(url)
 	print('response size: ' + str(len(content)))
