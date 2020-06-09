@@ -51,7 +51,7 @@ def query_export_titles(lang, session):
 	print('response size: ' + str(len(content)))
 	return json.loads(content)
 
-def main():
+def main(args):
 	_ = args.book.split(':')
 	lang, title = _[0], _[1].replace(' ', '_')
 	print(f'{title} at {lang}.ws')
@@ -130,4 +130,4 @@ if __name__ == "__main__":
 	)
 	args = parser.parse_args()
 
-	main()
+	main(args)
