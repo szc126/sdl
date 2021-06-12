@@ -116,7 +116,7 @@ def main(args):
 		for page in pages:
 			filename = re.sub(r'.+/(\d)', r'\1', page['title']) # XXX: localization?
 			path = os.path.join(args.out_dir, filename)
-			print(path)
+			if args.D: print(path)
 			with open(path, mode = 'w', encoding = 'utf-8') as file:
 				file.write(page['text'])
 		if args.D: input('... [bo choy]')
